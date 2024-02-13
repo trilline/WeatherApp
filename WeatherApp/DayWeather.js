@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+/*import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
 const API_KEY = 'e37256be6b72461d97f5f221359bd2bb';
 
-const fetchWeatherForecast = async (latitude, longitude, apiKey) => {
-  try {
-    const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
-  const [weatherForecast, setWeatherForecast] = useState(null);
-
 
   useEffect(() => {
     (async () => {
@@ -46,8 +35,6 @@ export default function App() {
         }
       };
 
-    
-
       try {
         const { coords } = location;
         const weatherData = await fetchWeather(coords.latitude, coords.longitude);
@@ -59,23 +46,6 @@ export default function App() {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        if (location) {
-          const { coords } = location;
-          const response = await fetchWeatherForecast(coords.latitude, coords.longitude, API_KEY);
-          setWeatherForecast(response);
-        }
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        setErrorMsg('Error fetching weather data');
-      }
-    };
-
-    fetchWeatherData();
-  }, [location]);
 
   return (
     <View style={styles.container}>
@@ -93,29 +63,7 @@ export default function App() {
         <Text style={styles.text}>Chargement de la météo...</Text>
       )}
       {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}
-
-
-      <ScrollView horizontal={true}>
-        {weatherForecast ? (
-          weatherForecast.list.map((forecast, index) => (
-            <View key={index} style={styles.forecastItem}>
-              <Text>Date et heure : {forecast.dt_txt}</Text>
-              <Text>Température : {forecast.main.temp}°C</Text>
-              <Text>Description : {forecast.weather[0].description}</Text>
-              <Image
-                style={styles.weatherIcon}
-                source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png` }}
-              />
-            </View>
-          ))
-        ) : (
-          <Text style={styles.text}>Chargement des prévisions météorologiques...</Text>
-        )}
-      </ScrollView>
-      {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
     </View>
-
-
   );
 }
 
@@ -141,12 +89,5 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
-  forecastItem: {
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  weatherForcastIcon: {
-    width: 50,
-    height: 50,
-  },
 });
+*/
