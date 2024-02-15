@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import DayWeather from './DayWeather';
+import LocationComponent from './LocationComponent';
+import ForecastComponent from './ForecastComponent';
 
 const API_KEY = 'e37256be6b72461d97f5f221359bd2bb';
 
@@ -12,6 +15,18 @@ const fetchWeatherForecast = async (latitude, longitude, apiKey) => {
   } catch (error) {
     throw error;
   }
+};
+
+const groupForecastByDay = (forecastList) => {
+  const groupedForecast = {};
+  forecastList.forEach((forecast) => {
+    const date = forecast.dt_txt.split(' ')[0]; // Extract date from dt_txt
+    if (!groupedForecast[date]) {
+      groupedForecast[date] = [];
+    }
+    groupedForecast[date].push(forecast);
+  });
+  return groupedForecast;
 };
 
 export default function App() {
@@ -79,7 +94,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {weatherData ? (
+      <DayWeather  weatherData = {weatherData} errorMsg={ errorMsg}>
+
+      </DayWeather>
+      {/*{weatherData ? (
         <>
           <Text style={styles.text}>Ville: {weatherData.name}</Text>
           <Text style={styles.text}>Température: {weatherData.main.temp}°C</Text>
@@ -92,26 +110,38 @@ export default function App() {
       ) : (
         <Text style={styles.text}>Chargement de la météo...</Text>
       )}
-      {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}
+      {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}*/}
 
+<ForecastComponent weatherForecast = {weatherForecast}>
 
-      <ScrollView horizontal={true}>
+</ForecastComponent>
+   {/*}   <ScrollView  horizontal={false}>
         {weatherForecast ? (
-          weatherForecast.list.map((forecast, index) => (
-            <View key={index} style={styles.forecastItem}>
-              <Text>Date et heure : {forecast.dt_txt}</Text>
-              <Text>Température : {forecast.main.temp}°C</Text>
-              <Text>Description : {forecast.weather[0].description}</Text>
-              <Image
-                style={styles.weatherIcon}
-                source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png` }}
-              />
+          Object.keys(groupForecastByDay(weatherForecast.list)).map((date, index) => (
+            <View key={index} style={styles.forecastDay}>
+              <Text style={styles.date}>{date}</Text>
+              <ScrollView horizontal={true} style={styles.forecastItems}>
+                {groupForecastByDay(weatherForecast.list)[date].map((forecast, index) => (
+                  <View key={index} style={styles.forecastItem}>
+                    <Text>Heure : {forecast.dt_txt.split(' ')[1]}</Text>
+                    <Text>Température : {forecast.main.temp}°C</Text>
+                    <Text>Description : {forecast.weather[0].description}</Text>
+                    <Image
+                      style={styles.weatherIcon}
+                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png` }}
+                    />
+                  </View>
+                ))}
+              </ScrollView>
             </View>
           ))
         ) : (
           <Text style={styles.text}>Chargement des prévisions météorologiques...</Text>
         )}
-      </ScrollView>
+        </ScrollView>*/}
+        <LocationComponent>
+          
+        </LocationComponent>
       {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
     </View>
 
@@ -137,15 +167,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  weatherIcon: {
-    width: 100,
-    height: 100,
-  },
-  forecastItem: {
-    marginBottom: 20,
+  forecastDay: {
+    marginRight: 20,
     alignItems: 'center',
   },
-  weatherForcastIcon: {
+  date: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  forecastItems: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  forecastItem: {
+    marginRight: 20,
+    alignItems: 'center',
+  },
+  weatherIcon: {
     width: 50,
     height: 50,
   },
