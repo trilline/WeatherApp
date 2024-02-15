@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import DayWeather from './DayWeather';
@@ -17,23 +17,12 @@ const fetchWeatherForecast = async (latitude, longitude, apiKey) => {
   }
 };
 
-const groupForecastByDay = (forecastList) => {
-  const groupedForecast = {};
-  forecastList.forEach((forecast) => {
-    const date = forecast.dt_txt.split(' ')[0]; // Extract date from dt_txt
-    if (!groupedForecast[date]) {
-      groupedForecast[date] = [];
-    }
-    groupedForecast[date].push(forecast);
-  });
-  return groupedForecast;
-};
-
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [weatherForecast, setWeatherForecast] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -78,14 +67,17 @@ export default function App() {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
+        setLoading(true); 
         if (location) {
           const { coords } = location;
           const response = await fetchWeatherForecast(coords.latitude, coords.longitude, API_KEY);
           setWeatherForecast(response);
         }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching weather data:', error);
         setErrorMsg('Error fetching weather data');
+        setLoading(false);
       }
     };
 
@@ -94,55 +86,22 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <DayWeather  weatherData = {weatherData} errorMsg={ errorMsg}>
-
-      </DayWeather>
-      {/*{weatherData ? (
-        <>
-          <Text style={styles.text}>Ville: {weatherData.name}</Text>
-          <Text style={styles.text}>Température: {weatherData.main.temp}°C</Text>
-          <Text style={styles.text}>Description: {weatherData.weather[0].description}</Text>
-          <Image
-            style={styles.weatherIcon}
-            source={{ uri: `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png` }}
-          />
-        </>
+      <Text style={styles.title}>WeatherApp</Text>
+      {loading ? 
+      ( 
+        <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <Text style={styles.text}>Chargement de la météo...</Text>
+        <>
+      <DayWeather  weatherData = {weatherData} errorMsg={ errorMsg}>
+      </DayWeather>
+      <ForecastComponent weatherForecast = {weatherForecast}>
+
+      </ForecastComponent>
+      <LocationComponent>
+      </LocationComponent>
+        </>
       )}
-      {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}*/}
 
-<ForecastComponent weatherForecast = {weatherForecast}>
-
-</ForecastComponent>
-   {/*}   <ScrollView  horizontal={false}>
-        {weatherForecast ? (
-          Object.keys(groupForecastByDay(weatherForecast.list)).map((date, index) => (
-            <View key={index} style={styles.forecastDay}>
-              <Text style={styles.date}>{date}</Text>
-              <ScrollView horizontal={true} style={styles.forecastItems}>
-                {groupForecastByDay(weatherForecast.list)[date].map((forecast, index) => (
-                  <View key={index} style={styles.forecastItem}>
-                    <Text>Heure : {forecast.dt_txt.split(' ')[1]}</Text>
-                    <Text>Température : {forecast.main.temp}°C</Text>
-                    <Text>Description : {forecast.weather[0].description}</Text>
-                    <Image
-                      style={styles.weatherIcon}
-                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png` }}
-                    />
-                  </View>
-                ))}
-              </ScrollView>
-            </View>
-          ))
-        ) : (
-          <Text style={styles.text}>Chargement des prévisions météorologiques...</Text>
-        )}
-        </ScrollView>*/}
-        <LocationComponent>
-          
-        </LocationComponent>
-      {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
     </View>
 
 
@@ -155,6 +114,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop:410,
   },
   text: {
     fontSize: 20,

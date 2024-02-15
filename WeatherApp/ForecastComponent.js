@@ -16,7 +16,7 @@ const groupForecastByDay = (forecastList) => {
 export default function ForecastComponent({ weatherForecast }) {
   return (
     <View>
-      <ScrollView  horizontal={false}>
+      <ScrollView style={styles.scroll} horizontal={false}>
         {weatherForecast ? (
           Object.keys(groupForecastByDay(weatherForecast.list)).map((date, index) => (
             <View key={index} style={styles.forecastDay}>
@@ -66,9 +66,13 @@ const styles = StyleSheet.create({
     forecastItem: {
       marginRight: 20,
       alignItems: 'center',
+      marginBottom: 10,
     },
     weatherIcon: {
       width: 50,
       height: 50,
     },
+    scroll: {
+        marginBottom: 400,
+      },
   });

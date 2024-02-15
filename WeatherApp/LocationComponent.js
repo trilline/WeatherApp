@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 
 export default function LocationComponent() {
@@ -21,7 +21,17 @@ export default function LocationComponent() {
 
   return (
     <View>
-      {errorMsg && <Text>{errorMsg}</Text>}
+      {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
+
     </View>
   );
 }
+const styles = StyleSheet.create({
+
+    error: {
+      fontSize: 18,
+      color: 'red',
+      textAlign: 'center',
+      margin: 10,
+    },
+  });
