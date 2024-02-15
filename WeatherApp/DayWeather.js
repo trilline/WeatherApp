@@ -6,9 +6,9 @@ export default function WeatherComponent({ weatherData, errorMsg }) {
     <View style={styles.card}>
       {weatherData ? (
         <>
-          <Text style={styles.text}>Ville: {weatherData.name}</Text>
-          <Text style={styles.text}>Température: {weatherData.main.temp}°C</Text>
-          <Text style={styles.text}>Description: {weatherData.weather[0].description}</Text>
+          <Text style={styles.weatherInfoText}>Ville: {weatherData.name}</Text>
+          <Text style={styles.weatherInfoText}>Température: {weatherData.main.temp}°C</Text>
+          <Text style={styles.weatherInfoText}>Description: {weatherData.weather[0].description}</Text>
           <Image
             style={styles.weatherIcon}
             source={{ uri: `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png` }}
@@ -29,15 +29,16 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     elevation: 2, 
+    marginBottom: 20,
     shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 }, 
     shadowOpacity: 0.25, 
     shadowRadius: 3.84, 
   },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    marginVertical: 5,
+  weatherInfoText: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#333', // Couleur du texte gris foncé
   },
   error: {
     fontSize: 18,

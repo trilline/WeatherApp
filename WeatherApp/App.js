@@ -89,7 +89,7 @@ export default function App() {
       <Text style={styles.title}>WeatherApp</Text>
       {loading ? 
       ( 
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#008080" />
       ) : (
         <>
       <DayWeather  weatherData = {weatherData} errorMsg={ errorMsg}>
@@ -111,14 +111,16 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f8ff', // Couleur de fond bleu clair
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20, // Ajoute du padding autour du contenu
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#008080', // Couleur du texte bleu foncé
     marginTop:410,
   },
   text: {
